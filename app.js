@@ -1,32 +1,61 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const dotenv= require('dotenv');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const express         = require('express');
+const path            = require('path');
+const logger          = require('morgan');
+const cookieParser    = require('cookie-parser');
+const bodyParser      = require('body-parser');
+const session         = require('express-session')
+const passport        = require('passport');
+
+//dotenv
+const dotenv          = require('dotenv');
 dotenv.config();
+
+//Redis
+const redis           = require('redis')
+const redisStore      = require('connect-redis')(session)
+const redisClient     = require('./helpers/redisStore');
+
+//routes
+const index           = require('./routes/index');
+const auth            = require('./routes/auth');
+const chat            = require('./routes/chat');
+
 const app = express();
-const db = require('./helper/db')()
+
+//Database
+const db              = require('./helpers/db')();
+
+//middlewares
+const isAuthenticated = require('./middleware/isAuthenticated');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//EXPRESS-SESSION
+app.use(session({
+  store: new redisStore({client:redisClient}),
+  secret:process.env.SESSION_SECRET_KEY,
+  resave:false,
+  saveUninitialized:true,
+  cookie:{ maxAge: 14*24*3600000}
+}));
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
-});
+//PASSPORT
+app.use(passport.initialize());
+app.use(passport.session());
+
+//ROUTES
+app.use('/', index);
+app.use('/auth', auth);
+app.use('/chat', isAuthenticated, chat);
 
 // error handler
 app.use((err, req, res, next) => {
