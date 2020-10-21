@@ -7,6 +7,10 @@ const userSchema = new Schema({
 		type: String,
 		unique: true
 	},
+	googleid: {
+		type: String,
+		unique: true
+	},
 	name: String,
 	surname: String,
 	profilePhotoUrl: String

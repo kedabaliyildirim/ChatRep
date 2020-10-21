@@ -12,7 +12,7 @@ passport.use(
 	},
 	((accessToken, refreshToken, profile, done) => {
 		const data = profile._json;
-		User.findOrCreate({ googleId: profile.id }
+		User.findOrCreate({ googleId: profile.id, googleid :profile.id }
 				,
 				{
 			 	name: data.given_name,
