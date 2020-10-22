@@ -10,6 +10,9 @@ const passport        = require('passport');
 const dotenv          = require('dotenv');
 dotenv.config();
 
+//Database
+const db              = require('./helpers/db')();
+
 //Redis
 const redis           = require('redis')
 const redisStore      = require('connect-redis')(session)
@@ -22,8 +25,6 @@ const chat            = require('./routes/chat');
 
 const app = express();
 
-//Database
-const db              = require('./helpers/db')();
 
 //middlewares
 const isAuthenticated = require('./middleware/isAuthenticated');
