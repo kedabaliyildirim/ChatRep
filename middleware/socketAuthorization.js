@@ -1,24 +1,29 @@
 const cookieParser =require ('cookie-parser');
-const passportsocketio = require('passport.socketio');
-const redisStore = require('../helpers/redisStore');
+const passportSocketIo = require('passport.socketio');
+const session         = require('express-session')
+const redis           = require('redis')
+const redisStore      = require('connect-redis')(session)
+const redisClient     = require('../helpers/redisStore');
 function onAuthorizeSuccess(data, accept){
-    console.log('successful connection to socket.io');
-    accept(null, true);
-  }
+
+  // The accept-callback still allows us to decide whether to
+  // accept the connection or not.
+  accept(null, true);
+}
+function onAuthorizeFail(data, message, error, accept){
+  if(error)
+    throw new Error(message);
+  console.log('failed connection to socket.io:', message);
+
+  // We use this callback to log all of our failed connections.
+  accept(null, false);
   
-  function onAuthorizeFail(data, message, error, accept){
-    if(error)
-      throw new Error(message);
-    console.log('failed connection to socket.io:', message);
-  
-    // We use this callback to log all of our failed connections.
-    accept(null, false);
-  }
-module.exports= passportsocketio.authorize({
+}
+module.exports= passportSocketIo.authorize({
     cookieParser,
     key         :'connect.sid',
     secret      :process.env.SESSION_SECRET_KEY,
-    store       :redisStore,
+    store       :new redisStore({client:redisClient}),
     success     :onAuthorizeSuccess,
     fail        :onAuthorizeFail
 })

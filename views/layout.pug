@@ -1,15 +1,19 @@
-doctype html
 html
   head
+    meta(charset='UTF-8')
     title= title
     block stylesheets
-      link(rel='stylesheet', href='/stylesheets/style.css')
       link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css')
-
-  body
-    div(ng-app = "chatrep", ng-cloak)
+      link(rel='stylesheet', href='/stylesheets/style.css')
+  
+  body(ng-app="chatrep", ng-cloak)
+     
     block content
 
-  block javascripts
-    script(src="/angular/angular.min.js")
-    script(src="/javascripts/main.js")
+
+block javascripts
+  script(src="/angular/angular.min.js") 
+  script(src="/jquery/dist/jquery.min.js")
+  script(src="/javascripts/main.js")
+    
+    
