@@ -39,13 +39,14 @@ io.on('connection', socket => {
         })
     })
     socket.on('newMessage', message =>{
-        console.log(message);
-        Messages.upsert({
+        const messageData = {
             ...message,
             userId  : socket.request.user._id,
             name    : socket.request.user.name,
             surname : socket.request.user.surname
-        });
+        };
+        Messages.upsert(messageData);
+        socket.broadcast.emit('realTimeMessage', (messageData))
     })
     socket.on('disconnect', () => {
         Users.remove(socket.request.user._id);
