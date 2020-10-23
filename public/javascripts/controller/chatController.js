@@ -1,7 +1,24 @@
-app.controller('chatController', ('$scope', ($scope) => {
-    $scope.activeTab   = 1;
-    $scope.chatClicked = false;
-    $scope.chatName    = ""
+app.controller('chatController', ('$scope', 'chatFactory','userFactory', ($scope, chatFactory, userFactory) => {
+    //initialization
+    function init(){
+        userFactory.getUser().then(user => {
+        $scope.user = user;
+        })
+
+    }
+    
+    init();
+    
+    
+    $scope.activeTab        = 1;
+    $scope.chatClicked      = false;
+    $scope.loadingMessages  = false;
+    $scope.chatName         = "";
+    $scope.roomId           = "";
+    $scope.message          = "";
+    $scope.messages         = [];
+    $scope.user             = {};
+
     const socket = io.connect('http://localhost:3000')
     
     
@@ -13,10 +30,25 @@ app.controller('chatController', ('$scope', ($scope) => {
         $scope.roomList = rooms;
         $scope.$apply();
     })
-
+    $scope.newMessage = () => {
+        socket.emit('newMessage', {
+            message: $scope.message,
+            roomId:  $scope.roomId
+        } )
+        $scope.message= '';
+        console.log($scope.user);
+    }
     $scope.switchRoom= room =>{
         $scope.chatClicked = true;
-        $scope.chatName    = room.roomName;
+        $scope.roomId      = room.id;
+        $scope.chatName    = room.Name;
+        $scope.loadingMessages  = true;
+        chatFactory.getMessages(room.id).then(data => {
+            console.log(data);
+            $scope.messages[room.id] = data;
+            console.log($scope.messages);
+            $scope.loadingMessages  = false;
+        })
     }
     
     $scope.onlineList
