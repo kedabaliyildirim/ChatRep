@@ -14,8 +14,8 @@ const Messages =require('./lib/Messages');
 const redisAdapter = require('socket.io-redis');
 const rooms = require('./lib/Rooms');
 io.adapter(redisAdapter({
-    host:process.env.REDIS_URL,
-    port:process.env.REDIS_PORT
+    host:REDIS_URL,
+    port:REDIS_PORT
 }))
 
 io.on('connection', socket => {
