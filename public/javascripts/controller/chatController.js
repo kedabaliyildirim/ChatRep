@@ -19,7 +19,7 @@ app.controller('chatController', ('$scope', 'chatFactory','userFactory', ($scope
     $scope.messages         = [];
     $scope.user             = {};
 
-    const socket = io.connect('http://localhost:3000')
+    const socket = io.connect('https://chatrep.herokuapp.com')
     
     
     socket.on('onlineUser', (users) => {
