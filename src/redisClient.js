@@ -4,8 +4,8 @@ const redis = require('redis');
 
 const getClient = () => {
     return redis.createClient({
-        host:REDIS_URL,
-        port:REDIS_PORT
+        host:process.env.HEROKU_REDIS_MAROON_URL,
+        port:process.env.REDIS_PORT
     })
 }
 
