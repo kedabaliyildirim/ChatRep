@@ -3,9 +3,9 @@
 const shortId     = require('shortid');
 
 
-// function Rooms() {
-//     this.client = redisClient.getClient();
-// }
+function Rooms() {
+   // this.client = redisClient.getClient();
+}
 module.exports = new Rooms();
 
 Rooms.prototype.upsert =function (Name) {
