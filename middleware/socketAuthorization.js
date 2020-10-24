@@ -1,9 +1,9 @@
 const cookieParser =require ('cookie-parser');
 const passportSocketIo = require('passport.socketio');
 const session         = require('express-session')
-const redis           = require('redis')
-const redisStore      = require('connect-redis')(session)
-const redisClient     = require('../helpers/redisStore');
+// const redis           = require('redis')
+// const redisStore      = require('connect-redis')(session)
+// const redisClient     = require('../helpers/redisStore');
 function onAuthorizeSuccess(data, accept){
 
   // The accept-callback still allows us to decide whether to
@@ -23,7 +23,7 @@ module.exports= passportSocketIo.authorize({
     cookieParser,
     key         :'connect.sid',
     secret      :process.env.SESSION_SECRET_KEY,
-    store       :new redisStore({client:redisClient}),
+    //store       :new redisStore({client:redisClient}),
     success     :onAuthorizeSuccess,
     fail        :onAuthorizeFail
 })
