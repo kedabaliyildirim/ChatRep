@@ -13,10 +13,10 @@ dotenv.config();
 //Database
 const db              = require('./helpers/db')();
 
-// //Redis
-// const redis           = require('redis')
-// const redisStore      = require('connect-redis')(session)
-// const redisClient     = require('./helpers/redisStore');
+//Redis
+const redis           = require('redis')
+const redisStore      = require('connect-redis')(session)
+const redisClient     = require('./helpers/redisStore');
 
 //routes
 const index           = require('./routes/index');
@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 
 //EXPRESS-SESSION
 app.use(session({
- // store: new redisStore({client:redisClient}),
+  store: new redisStore({client:redisClient}),
   secret:process.env.SESSION_SECRET_KEY,
   resave:false,
   saveUninitialized:true,

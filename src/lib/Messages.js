@@ -1,11 +1,12 @@
-// const redisClient = require('../redisClient');
-// const redis       = require('redis');
+const redisClient = require('../redisClient');
+const redis       = require('redis');
 const shortId     = require('shortid');
 const _           = require('lodash');
 
 function Messages() {
-   // this.client = redisClient.getClient();
+    this.client = redis.createClient({client:redisClient.client})
 }
+
 module.exports = new Messages();
 
 Messages.prototype.upsert =function ({roomId, message, userId, name, surname})  {

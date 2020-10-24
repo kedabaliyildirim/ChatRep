@@ -11,12 +11,12 @@ const Rooms =require('./lib/Rooms');
 const Messages =require('./lib/Messages');
 
 // REDIS ADAPTER
-//const redisAdapter = require('socket.io-redis');
+const redisAdapter = require('socket.io-redis');
+const client = require('./redisClient')
 const rooms = require('./lib/Rooms');
-// io.adapter(redisAdapter({
-//     host:process.env.HEROKU_REDIS_MAROON_URL,
-//     port:process.env.REDIS_PORT
-// }))
+io.adapter(redisAdapter({
+    host:process.env.HEROKU_REDIS_ROSE_URL,
+}))
 
 io.on('connection', socket => {
     Rooms.list(rooms => {

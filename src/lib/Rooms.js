@@ -1,10 +1,10 @@
-// const redisClient = require('../redisClient');
-// const redis       = require('redis');
+const redisClient = require('../redisClient');
+const redis       = require('redis');
 const shortId     = require('shortid');
 
 
 function Rooms() {
-   // this.client = redisClient.getClient();
+    this.client = redis.createClient({client:redisClient.client})
 }
 module.exports = new Rooms();
 
